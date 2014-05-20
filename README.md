@@ -1,7 +1,7 @@
 blueberryPi
 ===========
 
-Bluetooth stuff for my RasberryPi project(s)
+Bluetooth stuff for my RaspberryPi project(s)
 
 
 /usr/bin/bluez-simple-agent:
