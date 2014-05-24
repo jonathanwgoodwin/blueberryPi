@@ -1,3 +1,3 @@
 #!/bin/bash
-python service.py & 
+python service.py &> service.out & 
 python web.py &> web.out &
