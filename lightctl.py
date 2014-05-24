@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+# About half of this (the part that's not integrated w/ bluetooth, is lifed from here: https://github.com/pranav/pyblaster
 import urllib2
 import json
 import time
