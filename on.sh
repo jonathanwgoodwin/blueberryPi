@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Just turns on the lighstrip; no complicated shit here.
+
 arr[0]=18
 arr[1]=23
 arr[2]=24
