@@ -22,13 +22,10 @@ def set_all(val):
 def lightctl():
      response = urllib2.urlopen('http://localhost:5000/strength')
      strength = json.load(response)['strength']
-     print type(strength)
      if strength >= -70:
           set_all(0)
      else:
          set_all(1)
-
-
 
 while True:
     lightctl()

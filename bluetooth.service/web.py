@@ -8,16 +8,21 @@ strength = -100
 
 @app.route("/")
 def welcome():
-    return "welcome to blueberry"
-
+    return jsonify(welcome="welcome to blueberry")
 
 @app.route("/strength")
 def strength():
     f = open('./bluetooth.status', 'r')
-    strength = int(f.readlines()[0])
+    lines = f.readlines()
+    if len(lines) > 0:
+        strength = int(lines[0])
+    else:
+        print 'someone fucked up'
+        strength = -1000000
     return jsonify(strength=strength)
     f.close()
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',
+            debug=True)
