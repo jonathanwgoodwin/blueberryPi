@@ -29,6 +29,7 @@ def lightctl():
      else:
          set_all(1)
 
+# wat
 while True:
     lightctl()
     time.sleep(3)
