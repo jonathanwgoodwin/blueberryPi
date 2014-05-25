@@ -4,9 +4,9 @@
 import urllib2
 import json
 import time
-RED_GPIO = 18
-BLUE_GPIO = 23
-GREEN_GPIO = 24
+RED_GPIO = 23
+BLUE_GPIO = 24
+GREEN_GPIO = 18
 
 
 GPIOS = [RED_GPIO, BLUE_GPIO, GREEN_GPIO]
@@ -24,8 +24,10 @@ def set_all(val):
 def lightctl():
      response = urllib2.urlopen('http://localhost:5000/strength')
      strength = json.load(response)['strength']
-     if strength >= -70:
-          set_all(0)
+     if strength >= -100:
+          set(RED_GPIO,1)
+          set(GREEN_GPIO,.3)
+          set(BLUE_GPIO,0)
      else:
          set_all(1)
 
