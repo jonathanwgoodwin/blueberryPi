@@ -26,7 +26,7 @@ def lightctl():
      strength = json.load(response)['strength']
      if strength >= -100:
           set(RED_GPIO,1)
-          set(GREEN_GPIO,.3)
+          set(GREEN_GPIO,.7)
           set(BLUE_GPIO,0)
      else:
          set_all(1)
