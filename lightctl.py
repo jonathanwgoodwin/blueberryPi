@@ -12,6 +12,8 @@ FIFO = open('/dev/pi-blaster', 'w', buffering=0)
 
 
 PREV_STR = [1]
+LAST_STATUS = 'off'
+THRESHOLD = -100
 
 def set(gpio, value):
     s = "%s=%s\n" % (gpio, value)
@@ -24,7 +26,7 @@ def set_all(val):
 def lightctl():
      response = urllib2.urlopen('http://localhost:5000/strength')
      on = PREVENT_FUCKING_FLAPPING(json.load(response)['strength'])
-     
+
      if on:
           set(RED_GPIO,1)
           set(GREEN_GPIO,.7)
@@ -34,17 +36,21 @@ def lightctl():
 
 def PREVENT_FUCKING_FLAPPING(STR):
     STATUS_LIST = [STR] + PREV_STR
-    THRESHOLD = -100
     STATUS = { 'on' : 0, 'off' : 0 }
-    for strength in STATUS_LIST:
-        if strength > THRESHOLD:
-            STATUS['on']=STATUS['on'] + 1
-        else:
-            STATUS['off']=STATUS['off'] + 1
     if len(PREV_STR) > 5:
         PREV_STR.pop(0)
         PREV_STR.append(STR)
-    return STATUS['on'] > STATUS['off']
+
+    if STR > THRESHOLD:
+        return True
+    else:
+        for strength in STATUS_LIST:
+            if strength > THRESHOLD:
+                STATUS['on']=STATUS['on'] + 1
+            else:
+                STATUS['off']=STATUS['off'] + 1
+
+        return STATUS['on'] > STATUS['off']
 
 # wat
 while True:
