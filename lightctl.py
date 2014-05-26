@@ -11,12 +11,10 @@ GPIOS = [RED_GPIO, BLUE_GPIO, GREEN_GPIO]
 FIFO = open('/dev/pi-blaster', 'w', buffering=0)
 
 
-PREV_STR = [1]
-LAST_STATUS = 'off'
 THRESHOLD = -100
 
 def set(gpio, value):
-    s = "%s=%s\n" % (gpio, value)
+    s = '%s=%s\n' % (gpio, value)
     FIFO.write(s)
 
 def set_all(val):
@@ -35,22 +33,10 @@ def lightctl():
          set_all(1)
 
 def PREVENT_FUCKING_FLAPPING(STR):
-    STATUS_LIST = [STR] + PREV_STR
-    STATUS = { 'on' : 0, 'off' : 0 }
-    if len(PREV_STR) > 5:
-        PREV_STR.pop(0)
-        PREV_STR.append(STR)
-
-    if STR > THRESHOLD:
-        return True
-    else:
-        for strength in STATUS_LIST:
-            if strength > THRESHOLD:
-                STATUS['on']=STATUS['on'] + 1
-            else:
-                STATUS['off']=STATUS['off'] + 1
-
-        return STATUS['on'] > STATUS['off']
+    data = json.load(urllib2.urlopen('http://potato:5984/bluetooth_metrics/_design/timed_docs/_view/docs_w_dates?descending=true&limit=1'))
+    STR = data['rows'][0]['value']['bluetooth_strength']
+    print STR
+    return STR > THRESHOLD
 
 # wat
 while True:
