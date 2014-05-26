@@ -1,2 +1,2 @@
-bluetooth.service/bluetooth.status
 bluetooth.service/*.out
+lightctl.out
