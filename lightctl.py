@@ -11,7 +11,7 @@ GPIOS = [RED_GPIO, BLUE_GPIO, GREEN_GPIO]
 FIFO = open('/dev/pi-blaster', 'w', buffering=0)
 LAST_STATUS = True
 
-THRESHOLD = -100
+THRESHOLD = -85
 
 def set(gpio, value):
     s = '%s=%s\n' % (gpio, value)
@@ -38,7 +38,7 @@ def PREVENT_FUCKING_FLAPPING(last_status):
     str_list = []
     threshold_count = {'on' : 0 , 'off' : 0 }
     for each in data['rows']:
-        strength = each['value']['bluetooth_strength']
+        strength = int(each['value']['bluetooth_strength'])
         str_list.append(strength)
         if strength > THRESHOLD:
             threshold_count['on'] = threshold_count['on'] + 1
@@ -48,22 +48,22 @@ def PREVENT_FUCKING_FLAPPING(last_status):
     STR = str_list[0]
     if STR > THRESHOLD:
         # it should be on
-        print 'Lights on, str=%s' % ( STR )
+        print 'Lights on, str: %s' % ( STR )
         return True
     if STR < THRESHOLD and not LAST_STATUS:
         # it should be off; and it was off last time
-        print 'Lights off, str=%s' % ( STR )
+        print 'Lights off, str: %s' % ( STR )
         return False
     if STR < THRESHOLD and LAST_STATUS:
         # it should probably be off; but it was on last time
         if threshold_count['on'] > threshold_count['off']:
             # more on's in the last 5 than offs
             # it should probably just be on
-            print 'Lights on, vote on: %d off: str=%s' % ( threshold_count['on'], threshold_count['off'], STR )
+            print 'Lights on, vote on: %d off: %d str: %s' % ( threshold_count['on'], threshold_count['off'], STR )
             return True
         else:
             # more offs; therefor SHUT IT DOWN
-            print 'lights off, vote on: %d off: str=%s' % ( threshold_count['on'], threshold_count['off'], STR )
+            print 'lights off, vote on: %d off: %d str: %s' % ( threshold_count['on'], threshold_count['off'], STR )
             return False
 
 
