@@ -20,17 +20,18 @@ def get_rssi(count):
     for line in lines:
         if line[0:4] == "RSSI":
             STR = line.split('[')[1].split(']')[0]
-            doc_id, doc_rev = db.save({'bluetooth_strength' : STR,
-                                       'time' : str(datetime.now()) })
-            print doc_id, doc_rev
+            doc = {'bluetooth_strength' : STR, 'time' : str(datetime.now()) }
+            doc_id, doc_rev = db.save(doc)
+            print doc
             found_strength = True
             print 'count at %d' % ( count )
 
         else:
             count = count + 1
             if count > 15:
-                doc_id, doc_rev = db.save({'bluetooth_strength' : -200,
-                                       'time' : str(datetime.now()) })
+                doc = {'bluetooth_strength' : -200, 'time' : str(datetime.now()) }
+                doc_id, doc_rev = db.save(doc)
+                print doc
                 print 'count at %d' % ( count )
     if not found_strength:
         print 'setting count to %d' % ( count )
